@@ -32,6 +32,12 @@ export class TaskService {
     taskId: string,
     updateTaskDto: UpdateTaskDto,
   ): Promise<void> {
-    await this.taskModel.findOneAndUpdate({ id: taskId }, updateTaskDto);
+    const updatedTask = await this.taskModel.findOneAndUpdate(
+      { id: taskId },
+      updateTaskDto,
+    );
+    if (!updatedTask) {
+      throw new NotFoundException('task is not found');
+    }
   }
 }
