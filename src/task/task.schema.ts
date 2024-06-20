@@ -16,7 +16,7 @@ export class Task {
   @Prop({ maxlength: 1000 })
   description?: string;
 
-  @Prop({ default: now })
+  @Prop()
   dueDate?: Date;
 
   @Prop({ type: String, enum: TaskPriorityEnum })
