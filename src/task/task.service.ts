@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateTaskDto } from './create-task.dto';
+import { TaskMapper } from './task.mapper';
 import { Task } from './task.schema';
 import { UpdateTaskDto } from './update-task.dto';
 
@@ -11,12 +12,12 @@ export class TaskService {
 
   async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     const createdTask = new this.taskModel(createTaskDto);
-    return await createdTask.save();
+    return TaskMapper.toDomain(await createdTask.save());
   }
 
   async getAllTasks(): Promise<Task[]> {
     const taskList = await this.taskModel.find();
-    return taskList;
+    return taskList.map((taskRaw) => TaskMapper.toDomain(taskRaw));
   }
 
   async getTaskById(taskId: string): Promise<Task> {
@@ -25,7 +26,7 @@ export class TaskService {
       throw new NotFoundException('task is not found');
     }
 
-    return task;
+    return TaskMapper.toDomain(task);
   }
 
   async updateTaskById(
