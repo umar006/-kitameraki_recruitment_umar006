@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import databaseConfig from './database/database.config';
 import { DatabaseModule } from './database/database.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { DatabaseModule } from './database/database.module';
       envFilePath: ['.env'],
     }),
     DatabaseModule,
+    TaskModule,
   ],
   controllers: [],
   providers: [],
