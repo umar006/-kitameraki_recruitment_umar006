@@ -1,5 +1,5 @@
 import {
-  IsDate,
+  IsDateString,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -24,7 +24,7 @@ export class CreateTaskDto {
   description?: string;
 
   @IsOptional()
-  @IsDate()
+  @IsDateString()
   dueDate?: Date;
 
   @IsOptional()
@@ -33,6 +33,7 @@ export class CreateTaskDto {
 
   @IsOptional()
   @IsString({ each: true })
+  @IsNotEmpty({ each: true })
   @MaxLength(50, { each: true })
   tags?: string[];
 }
