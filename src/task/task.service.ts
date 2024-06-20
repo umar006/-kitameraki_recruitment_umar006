@@ -40,4 +40,11 @@ export class TaskService {
       throw new NotFoundException('task is not found');
     }
   }
+
+  async deleteTaskById(taskId: string): Promise<void> {
+    const deletedTask = await this.taskModel.findOneAndDelete({ id: taskId });
+    if (!deletedTask) {
+      throw new NotFoundException('task is not found');
+    }
+  }
 }
