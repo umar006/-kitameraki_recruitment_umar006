@@ -21,7 +21,10 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './schema/task.schema';
-import { ApiCreateTaskResponse } from './swagger/custom-decorator.swagger';
+import {
+  ApiCreateTaskResponse,
+  ApiGetAllTasksResponse,
+} from './swagger/custom-decorator.swagger';
 import { TaskService } from './task.service';
 
 @ApiTags('tasks')
@@ -36,11 +39,7 @@ export class TaskController {
     return resp;
   }
 
-  @ApiOkResponse({
-    type: Task,
-    isArray: true,
-    description: 'Success get all tasks',
-  })
+  @ApiGetAllTasksResponse()
   @Get()
   async getTaskList(@Query() query: QueryTaskDto): Promise<Task[]> {
     const resp = await this.taskService.getAllTasks(query);
