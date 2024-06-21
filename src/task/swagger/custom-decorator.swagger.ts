@@ -2,6 +2,7 @@ import { applyDecorators } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
 } from '@nestjs/swagger';
@@ -38,6 +39,13 @@ export const ApiUpdateTaskByIdResponse = () => {
   return applyDecorators(
     ApiOkResponse({ type: Task, description: 'Success update task' }),
     ApiBadRequestResponse({ description: 'Validation Error' }),
+    ApiNotFoundResponse({ description: 'Task Not Found' }),
+  );
+};
+
+export const ApiDeleteTaskByIdResponse = () => {
+  return applyDecorators(
+    ApiNoContentResponse({ description: 'Success delete a task' }),
     ApiNotFoundResponse({ description: 'Task Not Found' }),
   );
 };

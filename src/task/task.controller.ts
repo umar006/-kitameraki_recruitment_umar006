@@ -10,17 +10,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import {
-  ApiNoContentResponse,
-  ApiNotFoundResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './schema/task.schema';
 import {
   ApiCreateTaskResponse,
+  ApiDeleteTaskByIdResponse,
   ApiGetAllTasksResponse,
   ApiGetTaskByIdResponse,
   ApiUpdateTaskByIdResponse,
@@ -63,8 +60,7 @@ export class TaskController {
     return resp;
   }
 
-  @ApiNoContentResponse({ description: 'Success delete a task' })
-  @ApiNotFoundResponse({ description: 'Task Not Found' })
+  @ApiDeleteTaskByIdResponse()
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteTaskById(@Param('id') id: string): Promise<void> {
