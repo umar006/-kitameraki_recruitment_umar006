@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
-import { TaskPriorityEnum, TaskStatusEnum } from './task.enum';
+import { TaskPriorityEnum, TaskStatusEnum } from './../task.enum';
 
 export type TaskDocument = HydratedDocument<Task>;
 
