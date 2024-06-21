@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { TaskNotFoundException } from './exception/task-not-found.exception';
 import { Task } from './schema/task.schema';
 import { TaskRepository } from './task.repository';
 
@@ -20,7 +21,7 @@ export class TaskService {
   async getTaskById(taskId: string): Promise<Task> {
     const task = await this.taskRepository.getTaskById(taskId);
     if (!task) {
-      throw new NotFoundException('task is not found');
+      throw new TaskNotFoundException();
     }
 
     return task;
@@ -35,7 +36,7 @@ export class TaskService {
       updateTaskDto,
     );
     if (!updatedTask) {
-      throw new NotFoundException('task is not found');
+      throw new TaskNotFoundException();
     }
 
     return updatedTask;
@@ -44,7 +45,7 @@ export class TaskService {
   async deleteTaskById(taskId: string): Promise<void> {
     const deletedTask = await this.taskRepository.deleteTaskById(taskId);
     if (!deletedTask) {
-      throw new NotFoundException('task is not found');
+      throw new TaskNotFoundException();
     }
   }
 }

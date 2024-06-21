@@ -1,8 +1,8 @@
-import { NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { TaskNotFoundException } from './exception/task-not-found.exception';
 import { Task } from './schema/task.schema';
 import { TaskStatusEnum } from './task.enum';
 import { TaskRepository } from './task.repository';
@@ -83,7 +83,7 @@ describe('TaskService', () => {
 
       const taskError = async () => await taskService.getTaskById('notfoundid');
 
-      expect(taskError).rejects.toThrow(NotFoundException);
+      expect(taskError).rejects.toThrow(TaskNotFoundException);
     });
   });
 
@@ -113,7 +113,7 @@ describe('TaskService', () => {
       const taskError = async () =>
         await taskService.updateTaskById('notfoundid', updateTask);
 
-      expect(taskError).rejects.toThrow(NotFoundException);
+      expect(taskError).rejects.toThrow(TaskNotFoundException);
     });
   });
 
@@ -124,7 +124,7 @@ describe('TaskService', () => {
       const taskError = async () =>
         await taskService.deleteTaskById('notfoundid');
 
-      expect(taskError).rejects.toThrow(NotFoundException);
+      expect(taskError).rejects.toThrow(TaskNotFoundException);
     });
   });
 });
