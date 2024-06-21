@@ -33,3 +33,11 @@ export const ApiGetTaskByIdResponse = () => {
     ApiNotFoundResponse({ description: 'Task Not Found' }),
   );
 };
+
+export const ApiUpdateTaskByIdResponse = () => {
+  return applyDecorators(
+    ApiOkResponse({ type: Task, description: 'Success update task' }),
+    ApiBadRequestResponse({ description: 'Validation Error' }),
+    ApiNotFoundResponse({ description: 'Task Not Found' }),
+  );
+};

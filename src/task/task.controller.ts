@@ -11,10 +11,8 @@ import {
   Query,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
-  ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -25,6 +23,7 @@ import {
   ApiCreateTaskResponse,
   ApiGetAllTasksResponse,
   ApiGetTaskByIdResponse,
+  ApiUpdateTaskByIdResponse,
 } from './swagger/custom-decorator.swagger';
 import { TaskService } from './task.service';
 
@@ -54,9 +53,7 @@ export class TaskController {
     return resp;
   }
 
-  @ApiOkResponse({ type: Task, description: 'Success update task' })
-  @ApiBadRequestResponse({ description: 'Validation Error' })
-  @ApiNotFoundResponse({ description: 'Task Not Found' })
+  @ApiUpdateTaskByIdResponse()
   @Patch(':id')
   async updateTaskById(
     @Param('id') id: string,
