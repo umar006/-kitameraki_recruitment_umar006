@@ -37,4 +37,9 @@ export class TaskRepository {
     );
     return updatedTask ? TaskMapper.toDomain(updatedTask) : null;
   }
+
+  async deleteTaskById(taskId: string): Promise<Task | null> {
+    const deletedTask = await this.taskModel.findOneAndDelete({ id: taskId });
+    return deletedTask ? TaskMapper.toDomain(deletedTask) : null;
+  }
 }
