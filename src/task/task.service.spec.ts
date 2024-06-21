@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -13,6 +14,7 @@ describe('TaskService', () => {
   const mockTaskRepo = {
     createTask: jest.fn(),
     getAllTasks: jest.fn(),
+    getTaskById: jest.fn(),
   };
 
   const mockTask = {
@@ -61,6 +63,24 @@ describe('TaskService', () => {
       const taskList = await taskService.getAllTasks({});
 
       expect(taskList).toEqual([mockTask, mockTask]);
+    });
+  });
+
+  describe('getTaskById', () => {
+    it('should return task with correct id', async () => {
+      jest.spyOn(taskRepository, 'getTaskById').mockResolvedValueOnce(mockTask);
+
+      const task = await taskService.getTaskById(mockTask.id);
+
+      expect(task).toEqual(mockTask);
+    });
+
+    it('should throw NotFoundException if task is not found', async () => {
+      jest.spyOn(taskRepository, 'getTaskById').mockResolvedValueOnce(null);
+
+      const taskError = async () => await taskService.getTaskById('notfoundid');
+
+      expect(taskError).rejects.toThrow(NotFoundException);
     });
   });
 });
