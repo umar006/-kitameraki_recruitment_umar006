@@ -8,8 +8,10 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateTaskDto } from './create-task.dto';
+import { QueryTaskDto } from './query-task.dto';
 import { Task } from './task.schema';
 import { TaskService } from './task.service';
 import { UpdateTaskDto } from './update-task.dto';
@@ -25,8 +27,8 @@ export class TaskController {
   }
 
   @Get()
-  async getTaskList(): Promise<Task[]> {
-    const resp = await this.taskService.getAllTasks();
+  async getTaskList(@Query() query: QueryTaskDto): Promise<Task[]> {
+    const resp = await this.taskService.getAllTasks(query);
     return resp;
   }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateTaskDto } from './create-task.dto';
+import { QueryTaskDto } from './query-task.dto';
 import { TaskMapper } from './task.mapper';
 import { Task } from './task.schema';
 import { UpdateTaskDto } from './update-task.dto';
@@ -16,8 +17,11 @@ export class TaskRepository {
     return TaskMapper.toDomain(taskObject);
   }
 
-  async getAllTasks(): Promise<Task[]> {
-    const taskList = await this.taskModel.find();
+  async getAllTasks(query: QueryTaskDto): Promise<Task[]> {
+    const taskList = await this.taskModel
+      .find()
+      .skip((query.page - 1) * query.limit)
+      .limit(query.limit);
     return taskList.map((taskRaw) => TaskMapper.toDomain(taskRaw));
   }
 
