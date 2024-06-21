@@ -10,7 +10,14 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -22,24 +29,36 @@ import { TaskService } from './task.service';
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
+  @ApiCreatedResponse({ type: Task, description: 'Success create a new task' })
+  @ApiBadRequestResponse({ description: 'Validation Error' })
   @Post()
   async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     const resp = await this.taskService.createTask(createTaskDto);
     return resp;
   }
 
+  @ApiOkResponse({
+    type: Task,
+    isArray: true,
+    description: 'Success get all tasks',
+  })
   @Get()
   async getTaskList(@Query() query: QueryTaskDto): Promise<Task[]> {
     const resp = await this.taskService.getAllTasks(query);
     return resp;
   }
 
+  @ApiOkResponse({ type: Task, description: 'Success get task' })
+  @ApiNotFoundResponse({ description: 'Task Not Found' })
   @Get(':id')
   async getTaskById(@Param('id') id: string): Promise<Task> {
     const resp = await this.taskService.getTaskById(id);
     return resp;
   }
 
+  @ApiOkResponse({ type: Task, description: 'Success update task' })
+  @ApiBadRequestResponse({ description: 'Validation Error' })
+  @ApiNotFoundResponse({ description: 'Task Not Found' })
   @Patch(':id')
   async updateTaskById(
     @Param('id') id: string,
@@ -49,6 +68,8 @@ export class TaskController {
     return resp;
   }
 
+  @ApiNoContentResponse({ description: 'Success delete a task' })
+  @ApiNotFoundResponse({ description: 'Task Not Found' })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteTaskById(@Param('id') id: string): Promise<void> {
