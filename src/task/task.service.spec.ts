@@ -17,6 +17,7 @@ describe('TaskService', () => {
     getAllTasks: jest.fn(),
     getTaskById: jest.fn(),
     updateTaskById: jest.fn(),
+    deleteTaskById: jest.fn(),
   };
 
   const mockTask = {
@@ -111,6 +112,17 @@ describe('TaskService', () => {
 
       const taskError = async () =>
         await taskService.updateTaskById('notfoundid', updateTask);
+
+      expect(taskError).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('deleteTaskById', () => {
+    it('should throw NotFoundException if task is not found', async () => {
+      jest.spyOn(taskRepository, 'deleteTaskById').mockResolvedValueOnce(null);
+
+      const taskError = async () =>
+        await taskService.deleteTaskById('notfoundid');
 
       expect(taskError).rejects.toThrow(NotFoundException);
     });
