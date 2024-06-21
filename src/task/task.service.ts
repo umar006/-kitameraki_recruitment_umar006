@@ -5,14 +5,17 @@ import { CreateTaskDto } from './create-task.dto';
 import { TaskMapper } from './task.mapper';
 import { Task } from './task.schema';
 import { UpdateTaskDto } from './update-task.dto';
+import { TaskRepository } from './task.repository';
 
 @Injectable()
 export class TaskService {
-  constructor(@InjectModel(Task.name) private taskModel: Model<Task>) {}
+  constructor(
+    @InjectModel(Task.name) private taskModel: Model<Task>,
+    private readonly taskRepository: TaskRepository,
+  ) {}
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    const createdTask = new this.taskModel(createTaskDto);
-    return TaskMapper.toDomain(await createdTask.save());
+  createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+    return this.taskRepository.createTask(createTaskDto);
   }
 
   async getAllTasks(): Promise<Task[]> {
