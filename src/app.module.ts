@@ -4,6 +4,7 @@ import authConfig from './auth/auth.config';
 import databaseConfig from './database/database.config';
 import { DatabaseModule } from './database/database.module';
 import { TaskModule } from './task/task.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { TaskModule } from './task/task.module';
     }),
     DatabaseModule,
     TaskModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
