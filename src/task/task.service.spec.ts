@@ -12,6 +12,7 @@ describe('TaskService', () => {
 
   const mockTaskRepo = {
     createTask: jest.fn(),
+    getAllTasks: jest.fn(),
   };
 
   const mockTask = {
@@ -48,6 +49,18 @@ describe('TaskService', () => {
       const createdTask = await taskService.createTask(dto);
 
       expect(createdTask).toEqual(mockTask);
+    });
+  });
+
+  describe('getAllTasks', () => {
+    it('should return two tasks', async () => {
+      jest
+        .spyOn(taskRepository, 'getAllTasks')
+        .mockResolvedValueOnce([mockTask, mockTask]);
+
+      const taskList = await taskService.getAllTasks({});
+
+      expect(taskList).toEqual([mockTask, mockTask]);
     });
   });
 });
