@@ -6,17 +6,19 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { TaskPriorityEnum, TaskStatusEnum } from './task.enum';
+import { TaskPriorityEnum, TaskStatusEnum } from './../task.enum';
 
-export class CreateTaskDto {
+export class UpdateTaskDto {
+  @IsOptional()
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  title: string;
+  title?: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsEnum(TaskStatusEnum)
-  status: TaskStatusEnum;
+  status?: TaskStatusEnum;
 
   @IsOptional()
   @IsString()
