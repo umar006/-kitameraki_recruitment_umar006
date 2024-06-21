@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateTaskDto } from './create-task.dto';
 import { TaskMapper } from './task.mapper';
 import { Task } from './task.schema';
+import { UpdateTaskDto } from './update-task.dto';
 
 @Injectable()
 export class TaskRepository {
@@ -23,5 +24,17 @@ export class TaskRepository {
   async getTaskById(taskId: string): Promise<Task | null> {
     const task = await this.taskModel.findOne({ id: taskId });
     return task ? TaskMapper.toDomain(task) : null;
+  }
+
+  async updateTaskById(
+    taskId: string,
+    updateTaskDto: UpdateTaskDto,
+  ): Promise<Task | null> {
+    const updatedTask = await this.taskModel.findOneAndUpdate(
+      { id: taskId },
+      updateTaskDto,
+      { new: true },
+    );
+    return updatedTask ? TaskMapper.toDomain(updatedTask) : null;
   }
 }
