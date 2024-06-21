@@ -24,6 +24,7 @@ import { Task } from './schema/task.schema';
 import {
   ApiCreateTaskResponse,
   ApiGetAllTasksResponse,
+  ApiGetTaskByIdResponse,
 } from './swagger/custom-decorator.swagger';
 import { TaskService } from './task.service';
 
@@ -46,8 +47,7 @@ export class TaskController {
     return resp;
   }
 
-  @ApiOkResponse({ type: Task, description: 'Success get task' })
-  @ApiNotFoundResponse({ description: 'Task Not Found' })
+  @ApiGetTaskByIdResponse()
   @Get(':id')
   async getTaskById(@Param('id') id: string): Promise<Task> {
     const resp = await this.taskService.getTaskById(id);
