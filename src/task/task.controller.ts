@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -22,6 +21,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './schema/task.schema';
+import { ApiCreateTaskResponse } from './swagger/custom-decorator.swagger';
 import { TaskService } from './task.service';
 
 @ApiTags('tasks')
@@ -29,8 +29,7 @@ import { TaskService } from './task.service';
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  @ApiCreatedResponse({ type: Task, description: 'Success create a new task' })
-  @ApiBadRequestResponse({ description: 'Validation Error' })
+  @ApiCreateTaskResponse()
   @Post()
   async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
     const resp = await this.taskService.createTask(createTaskDto);
