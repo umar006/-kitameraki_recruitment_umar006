@@ -1,4 +1,4 @@
-import { Task, TaskDocument } from './task.schema';
+import { Task, TaskDocument } from './../task.schema';
 
 export class TaskMapper {
   static toDomain(raw: TaskDocument): Task {

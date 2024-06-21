@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { TaskMapper } from './task.mapper';
+import { TaskMapper } from './mapper/task.mapper';
 import { Task } from './task.schema';
 
 @Injectable()
