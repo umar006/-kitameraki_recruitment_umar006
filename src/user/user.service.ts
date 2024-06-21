@@ -1,6 +1,7 @@
 import {
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -29,5 +30,14 @@ export class UserService {
       }
       throw new InternalServerErrorException();
     }
+  }
+
+  async getUserByEmail(userId: string): Promise<User> {
+    const user = await this.userRepository.getUserByEmail(userId);
+    if (!user) {
+      throw new NotFoundException('user is not found');
+    }
+
+    return user;
   }
 }

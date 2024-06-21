@@ -12,4 +12,9 @@ export class UserRepository {
     const userObject = await createdUser.save();
     return UserMapper.toDomain(userObject);
   }
+
+  async getUserByEmail(email: string): Promise<User> {
+    const userObject = await this.taskModel.findOne({ email: email });
+    return userObject ? UserMapper.toDomain(userObject) : null;
+  }
 }
