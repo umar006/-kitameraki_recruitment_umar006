@@ -25,7 +25,7 @@ export class CreateTaskDto {
 
   @IsOptional()
   @IsDateString()
-  dueDate?: Date;
+  dueDate?: string;
 
   @IsOptional()
   @IsEnum(TaskPriorityEnum)
