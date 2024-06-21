@@ -26,7 +26,8 @@ export class TaskController {
 
   @Get()
   async getTaskList(): Promise<Task[]> {
-    return this.taskService.getAllTasks();
+    const resp = await this.taskService.getAllTasks();
+    return resp;
   }
 
   @Get(':id')
