@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './schema/task.schema';
 import { TaskStatusEnum } from './task.enum';
 import { TaskRepository } from './task.repository';
@@ -15,6 +16,7 @@ describe('TaskService', () => {
     createTask: jest.fn(),
     getAllTasks: jest.fn(),
     getTaskById: jest.fn(),
+    updateTaskById: jest.fn(),
   };
 
   const mockTask = {
@@ -79,6 +81,36 @@ describe('TaskService', () => {
       jest.spyOn(taskRepository, 'getTaskById').mockResolvedValueOnce(null);
 
       const taskError = async () => await taskService.getTaskById('notfoundid');
+
+      expect(taskError).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('updateTaskById', () => {
+    it('should return updated task', async () => {
+      const updateTask = {
+        title: 'updatedtask',
+      } as UpdateTaskDto;
+
+      mockTask.title = 'updatedtask';
+      jest
+        .spyOn(taskRepository, 'updateTaskById')
+        .mockResolvedValueOnce(mockTask);
+
+      const task = await taskService.updateTaskById(mockTask.id, updateTask);
+
+      expect(task).toEqual(mockTask);
+    });
+
+    it('should throw NotFoundException if task is not found', async () => {
+      const updateTask = {
+        title: 'updatedtask',
+      } as UpdateTaskDto;
+
+      jest.spyOn(taskRepository, 'updateTaskById').mockResolvedValueOnce(null);
+
+      const taskError = async () =>
+        await taskService.updateTaskById('notfoundid', updateTask);
 
       expect(taskError).rejects.toThrow(NotFoundException);
     });
