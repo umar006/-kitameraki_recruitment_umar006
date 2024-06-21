@@ -2,10 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateTaskDto } from './create-task.dto';
-import { TaskMapper } from './task.mapper';
+import { TaskRepository } from './task.repository';
 import { Task } from './task.schema';
 import { UpdateTaskDto } from './update-task.dto';
-import { TaskRepository } from './task.repository';
 
 @Injectable()
 export class TaskService {
@@ -23,12 +22,12 @@ export class TaskService {
   }
 
   async getTaskById(taskId: string): Promise<Task> {
-    const task = await this.taskModel.findOne({ id: taskId });
+    const task = await this.taskRepository.getTaskById(taskId);
     if (!task) {
       throw new NotFoundException('task is not found');
     }
 
-    return TaskMapper.toDomain(task);
+    return task;
   }
 
   async updateTaskById(

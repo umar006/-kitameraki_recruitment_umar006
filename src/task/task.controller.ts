@@ -32,7 +32,8 @@ export class TaskController {
 
   @Get(':id')
   async getTaskById(@Param('id') id: string): Promise<Task> {
-    return this.taskService.getTaskById(id);
+    const resp = await this.taskService.getTaskById(id);
+    return resp;
   }
 
   @Patch(':id')
