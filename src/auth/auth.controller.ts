@@ -7,7 +7,7 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginResponseDto } from './dto/login-response.dto';
@@ -52,6 +52,7 @@ export class AuthController {
   }
 
   @ApiLogoutResponse()
+  @ApiCookieAuth()
   @UseGuards(JwtGuard)
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
