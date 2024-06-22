@@ -6,6 +6,10 @@ class DatabaseEnv {
   @IsString()
   @IsNotEmpty()
   MONGODB_URL: string;
+
+  @IsString()
+  @IsNotEmpty()
+  MONGODB_NAME: string;
 }
 
 export default registerAs('database', () => {
