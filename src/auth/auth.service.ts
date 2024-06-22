@@ -1,7 +1,13 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserService } from 'src/user/user.service';
+import { User } from '../user/schema/user.schema';
+import { UserService } from '../user/user.service';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -18,7 +24,16 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto): Promise<LoginResponseDto> {
-    const user = await this.userService.getUserByEmail(loginDto.email);
+    let user: User;
+    try {
+      user = await this.userService.getUserByEmail(loginDto.email);
+    } catch (err) {
+      console.error(err);
+      if (err instanceof NotFoundException) {
+        throw new UnauthorizedException();
+      }
+      throw new InternalServerErrorException();
+    }
 
     const comparePwd = await bcrypt.compare(loginDto.password, user.password);
     if (!comparePwd) {
