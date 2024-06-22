@@ -5,18 +5,20 @@ import {
   HttpStatus,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { JwtGuard } from './guard/jwt.guard';
 import {
   ApiLoginResponse,
   ApiLogoutResponse,
   ApiRegisterResponse,
 } from './swagger/custom-decorator.swagger';
-import { Response } from 'express';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -50,6 +52,7 @@ export class AuthController {
   }
 
   @ApiLogoutResponse()
+  @UseGuards(JwtGuard)
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Res() response: Response): Promise<void> {
