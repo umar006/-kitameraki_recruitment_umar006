@@ -4,12 +4,14 @@ import { AuthService } from './auth.service';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ApiRegisterResponse } from './swagger/custom-decorator.swagger';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiRegisterResponse()
   @Post('register')
   @HttpCode(HttpStatus.NO_CONTENT)
   async register(@Body() registerDto: RegisterDto): Promise<void> {
