@@ -27,5 +27,6 @@ export const ApiLoginResponse = () => {
 export const ApiLogoutResponse = () => {
   return applyDecorators(
     ApiNoContentResponse({ description: 'Success logout user' }),
+    ApiUnauthorizedResponse({ description: 'Unauthorized' }),
   );
 };
