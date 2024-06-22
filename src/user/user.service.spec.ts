@@ -1,14 +1,15 @@
-import { getModelToken } from '@nestjs/mongoose';
-import { Test } from '@nestjs/testing';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './schema/user.schema';
-import { UserRepository } from './user.repository';
-import { UserService } from './user.service';
 import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { getModelToken } from '@nestjs/mongoose';
+import { Test } from '@nestjs/testing';
 import * as bcrypt from 'bcrypt';
+import authConfig from '../auth/auth.config';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './schema/user.schema';
+import { UserRepository } from './user.repository';
+import { UserService } from './user.service';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -19,6 +20,10 @@ describe('UserService', () => {
     getUserByEmail: jest.fn(),
   };
 
+  const mockAuthCfg = {
+    BCRYPT_SALT: 1,
+  };
+
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -27,6 +32,10 @@ describe('UserService', () => {
         {
           provide: getModelToken(User.name),
           useValue: mockUserRepo,
+        },
+        {
+          provide: authConfig.KEY,
+          useValue: mockAuthCfg,
         },
       ],
     }).compile();
@@ -55,7 +64,10 @@ describe('UserService', () => {
 
       const result = await userService.createUser(createUserDto);
 
-      expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
+      expect(bcrypt.hash).toHaveBeenCalledWith(
+        createUserDto.password,
+        mockAuthCfg.BCRYPT_SALT,
+      );
       expect(userRepository.createUser).toHaveBeenCalledWith({
         ...createUserDto,
         password: hashedPwd,
