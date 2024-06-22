@@ -8,11 +8,13 @@ import databaseConfig from './database.config';
   imports: [
     MongooseModule.forRootAsync({
       inject: [databaseConfig.KEY],
-      useFactory: (config: ConfigType<typeof databaseConfig>) => {
-        const mongodbUrl = config.MONGODB_URL;
+      useFactory: (dbCfg: ConfigType<typeof databaseConfig>) => {
+        const mongodbUrl = dbCfg.MONGODB_URL;
+        const mongodbName = dbCfg.MONGODB_NAME;
 
         return {
           uri: mongodbUrl,
+          dbName: mongodbName,
         };
       },
     }),
