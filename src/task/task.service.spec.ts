@@ -76,15 +76,19 @@ describe('TaskService', () => {
 
       const task = await taskService.getTaskById(mockTask.id);
 
+      expect(taskRepository.getTaskById).toHaveBeenCalledWith(mockTask.id);
       expect(task).toEqual(mockTask);
     });
 
     it('should throw NotFoundException if task is not found', async () => {
       jest.spyOn(taskRepository, 'getTaskById').mockResolvedValueOnce(null);
 
-      const taskError = async () => await taskService.getTaskById('notfoundid');
+      const taskId = 'notfoundid';
 
-      expect(taskError).rejects.toThrow(TaskNotFoundException);
+      await expect(taskService.getTaskById(taskId)).rejects.toThrow(
+        TaskNotFoundException,
+      );
+      expect(taskRepository.getTaskById).toHaveBeenCalledWith(taskId);
     });
   });
 
