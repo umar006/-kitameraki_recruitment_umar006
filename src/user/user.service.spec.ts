@@ -1,11 +1,14 @@
-import { UnprocessableEntityException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
-import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schema/user.schema';
 import { UserRepository } from './user.repository';
 import { UserService } from './user.service';
+import {
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -80,6 +83,34 @@ describe('UserService', () => {
         ...createUserDto,
         password: 'hashedPassword123',
       });
+    });
+  });
+
+  describe('getUserByEmail', () => {
+    it('should return a user if found', async () => {
+      const email = 'test@example.com';
+      const user: User = {
+        email,
+        password: 'hashedPassword123',
+      };
+
+      jest.spyOn(userRepository, 'getUserByEmail').mockResolvedValue(user);
+
+      const result = await userService.getUserByEmail(email);
+
+      expect(userRepository.getUserByEmail).toHaveBeenCalledWith(email);
+      expect(result).toEqual(user);
+    });
+
+    it('should throw NotFoundException if user is not found', async () => {
+      const email = 'test@example.com';
+
+      jest.spyOn(userRepository, 'getUserByEmail').mockResolvedValue(null);
+
+      await expect(userService.getUserByEmail(email)).rejects.toThrow(
+        NotFoundException,
+      );
+      expect(userRepository.getUserByEmail).toHaveBeenCalledWith(email);
     });
   });
 });
