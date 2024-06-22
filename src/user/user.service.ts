@@ -1,20 +1,28 @@
 import {
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
+import authConfig from '../auth/auth.config';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schema/user.schema';
 import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    @Inject(authConfig.KEY)
+    private authCfg: ConfigType<typeof authConfig>,
+  ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const hashedPwd = await bcrypt.hash(createUserDto.password, 10);
+    const bcryptSalt = this.authCfg.BCRYPT_SALT;
+    const hashedPwd = await bcrypt.hash(createUserDto.password, bcryptSalt);
 
     try {
       const createdUser = await this.userRepository.createUser({
