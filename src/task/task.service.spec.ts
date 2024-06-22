@@ -54,6 +54,7 @@ describe('TaskService', () => {
       const createdTask = await taskService.createTask(dto);
 
       expect(createdTask).toEqual(mockTask);
+      expect(taskRepository.createTask).toHaveBeenCalledWith(dto);
     });
   });
 
