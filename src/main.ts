@@ -24,6 +24,7 @@ async function bootstrap() {
     .setDescription('API description')
     .setVersion('1.0')
     .addServer('http://localhost:3000')
+    .addCookieAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-doc', app, document);

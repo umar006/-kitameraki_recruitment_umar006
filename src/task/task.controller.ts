@@ -11,7 +11,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
@@ -27,6 +27,7 @@ import {
 import { TaskService } from './task.service';
 
 @ApiTags('tasks')
+@ApiCookieAuth()
 @UseGuards(JwtGuard)
 @Controller('tasks')
 export class TaskController {
