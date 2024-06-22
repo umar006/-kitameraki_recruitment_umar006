@@ -23,3 +23,9 @@ export const ApiLoginResponse = () => {
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),
   );
 };
+
+export const ApiLogoutResponse = () => {
+  return applyDecorators(
+    ApiNoContentResponse({ description: 'Success logout user' }),
+  );
+};
