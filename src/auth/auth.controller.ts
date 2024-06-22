@@ -13,6 +13,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import {
   ApiLoginResponse,
+  ApiLogoutResponse,
   ApiRegisterResponse,
 } from './swagger/custom-decorator.swagger';
 import { Response } from 'express';
@@ -48,6 +49,7 @@ export class AuthController {
     return resp;
   }
 
+  @ApiLogoutResponse()
   @Post('logout')
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Res() response: Response): Promise<void> {
