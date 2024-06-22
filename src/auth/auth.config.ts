@@ -1,7 +1,8 @@
 import { registerAs } from '@nestjs/config';
-import { plainToInstance } from 'class-transformer';
+import { Transform, plainToInstance } from 'class-transformer';
 import {
   IsNotEmpty,
+  IsNumber,
   IsNumberString,
   IsString,
   validateSync,
@@ -15,6 +16,10 @@ class AuthEnv {
   @IsNotEmpty()
   @IsNumberString()
   JWT_EXPIRES_IN_HOUR: string;
+
+  @Transform(({ value }) => (Number(value) ? Number(value) : 10))
+  @IsNumber()
+  BCRYPT_SALT: number;
 }
 
 export default registerAs('auth', () => {
@@ -23,6 +28,7 @@ export default registerAs('auth', () => {
   if (errors.length > 0) {
     throw new Error(errors.toString());
   }
+  console.log(validateConfig.BCRYPT_SALT);
 
   return validateConfig;
 });
