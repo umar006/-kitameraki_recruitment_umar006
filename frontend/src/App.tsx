@@ -1,35 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { DatePicker } from '@fluentui/react/lib/DatePicker';
+import {
+  Dropdown,
+  IDropdownOption,
+  IDropdownStyles,
+} from '@fluentui/react/lib/Dropdown';
+import { IStackTokens, Stack } from '@fluentui/react/lib/Stack';
+import { TextField } from '@fluentui/react/lib/TextField';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const stackStyles: IStackTokens = {
+    childrenGap: 8,
+  };
+  const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 150 } };
+
+  const dropdownStatusOpts: IDropdownOption[] = [
+    { key: 'todo', text: 'TODO' },
+    { key: 'inprogress', text: 'IN-PROGRESS' },
+    { key: 'completed', text: 'COMPLETED' },
+  ];
+  const dropdownPriorityOpts: IDropdownOption[] = [
+    { key: 'low', text: 'LOW' },
+    { key: 'medium', text: 'MEDIUM' },
+    { key: 'high', text: 'HIGH' },
+  ];
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Stack>
+      <TextField label="Title" required />
+      <TextField label="Description" multiline />
+      <Stack horizontal tokens={stackStyles}>
+        <DatePicker label="Due date" placeholder="Select a date..." />
+        <Dropdown
+          label="Status"
+          placeholder="Select a status"
+          options={dropdownStatusOpts}
+          styles={dropdownStyles}
+        />
+        <Dropdown
+          label="Priority"
+          placeholder="Select a priority"
+          options={dropdownPriorityOpts}
+          styles={dropdownStyles}
+        />
+      </Stack>
+      <TextField
+        label="Tags"
+        description="Separate each tags with whitespace"
+      />
+    </Stack>
+  );
 }
 
-export default App
+export default App;
