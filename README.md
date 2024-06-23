@@ -45,17 +45,15 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
+### API Documentation
+
+Visit `http://localhost:3000/api-doc`
+
 ## Test
 
 ```bash
 # unit tests
 $ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
 ```
 
 ## Support
