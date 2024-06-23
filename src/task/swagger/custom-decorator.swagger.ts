@@ -66,10 +66,7 @@ export const ApiUpdateTaskByIdResponse = () => {
 export const ApiDeleteTaskByIdResponse = () => {
   return applyDecorators(
     ApiOperation({ summary: 'Delete a task by id' }),
-    ApiNoContentResponse({
-      type: MyHttpException,
-      description: 'Success delete a task',
-    }),
+    ApiNoContentResponse({ description: 'Success delete a task' }),
     ApiNotFoundResponse({
       type: MyHttpException,
       description: 'Task Not Found',
