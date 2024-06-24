@@ -21,9 +21,9 @@ export class TaskRepository {
     return TaskMapper.toDomain(taskObject);
   }
 
-  async getAllTasks(query: QueryTaskDto): Promise<Task[]> {
+  async getAllTasks(query: QueryTaskDto, user: User): Promise<Task[]> {
     const taskList = await this.taskModel
-      .find()
+      .find({ createdBy: { _id: user.id } })
       .skip((query.page - 1) * query.limit)
       .limit(query.limit)
       .populate('createdBy');

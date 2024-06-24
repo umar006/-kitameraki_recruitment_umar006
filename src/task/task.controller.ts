@@ -49,8 +49,12 @@ export class TaskController {
 
   @ApiGetAllTasksResponse()
   @Get()
-  async getTaskList(@Query() query: QueryTaskDto): Promise<Task[]> {
-    const resp = await this.taskService.getAllTasks(query);
+  async getTaskList(
+    @Query() query: QueryTaskDto,
+    @Req() request: Request,
+  ): Promise<Task[]> {
+    const user = request['user'] as User;
+    const resp = await this.taskService.getAllTasks(query, user);
     return resp;
   }
 

@@ -15,8 +15,8 @@ export class TaskService {
     return this.taskRepository.createTask(createTaskDto, user);
   }
 
-  getAllTasks(query: QueryTaskDto): Promise<Task[]> {
-    return this.taskRepository.getAllTasks(query);
+  getAllTasks(query: QueryTaskDto, user: User): Promise<Task[]> {
+    return this.taskRepository.getAllTasks(query, user);
   }
 
   async getTaskById(taskId: string): Promise<Task> {
