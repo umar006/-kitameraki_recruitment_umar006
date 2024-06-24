@@ -1,9 +1,9 @@
-import { AddTask } from '../types/task';
+import { AddTask, Task } from '../types/task';
 
 const BASE_URL =
   import.meta.env.VITE_BACKEND_URL.trim() || 'http://localhost:3000';
 
-export const createTask = async (task: AddTask) => {
+export const createTask = async (task: AddTask): Promise<Task> => {
   const title = task.title?.trim() ? task.title : undefined;
   const description = task.description?.trim() ? task.description : undefined;
   const dueDate = task.dueDate?.trim() ? task.dueDate : undefined;
@@ -28,5 +28,13 @@ export const createTask = async (task: AddTask) => {
     body: JSON.stringify(newTask),
   });
 
-  console.log(await res.json());
+  const createdTask = await res.json();
+
+  return createdTask;
+};
+
+export const getTaskList = async (): Promise<Task[]> => {
+  const res = await fetch(`${BASE_URL}/v1/tasks`);
+  const taskList = await res.json();
+  return taskList;
 };
