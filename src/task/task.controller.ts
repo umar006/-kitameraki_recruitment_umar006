@@ -60,8 +60,12 @@ export class TaskController {
 
   @ApiGetTaskByIdResponse()
   @Get(':id')
-  async getTaskById(@Param('id') id: string): Promise<Task> {
-    const resp = await this.taskService.getTaskById(id);
+  async getTaskById(
+    @Param('id') id: string,
+    @Req() request: Request,
+  ): Promise<Task> {
+    const user = request['user'] as JwtPayload;
+    const resp = await this.taskService.getTaskById(id, user);
     return resp;
   }
 

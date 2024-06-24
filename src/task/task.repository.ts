@@ -27,16 +27,16 @@ export class TaskRepository {
 
   async getAllTasks(query: QueryTaskDto, user: JwtPayload): Promise<Task[]> {
     const taskList = await this.taskModel
-      .find({ createdBy: { _id: user.id } })
+      .find({ createdBy: user.id })
       .skip((query.page - 1) * query.limit)
       .limit(query.limit)
       .populate('createdBy');
     return taskList.map((taskRaw) => TaskMapper.toDomain(taskRaw));
   }
 
-  async getTaskById(taskId: string): Promise<Task | null> {
+  async getTaskById(taskId: string, user: JwtPayload): Promise<Task | null> {
     const task = await this.taskModel
-      .findOne({ id: taskId })
+      .findOne({ id: taskId, createdBy: user.id })
       .populate('createdBy');
     return task ? TaskMapper.toDomain(task) : null;
   }

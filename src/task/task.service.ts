@@ -19,8 +19,8 @@ export class TaskService {
     return this.taskRepository.getAllTasks(query, user);
   }
 
-  async getTaskById(taskId: string): Promise<Task> {
-    const task = await this.taskRepository.getTaskById(taskId);
+  async getTaskById(taskId: string, user: JwtPayload): Promise<Task> {
+    const task = await this.taskRepository.getTaskById(taskId, user);
     if (!task) {
       throw new TaskNotFoundException();
     }
