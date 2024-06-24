@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { Type } from 'class-transformer';
+import mongoose, { HydratedDocument } from 'mongoose';
+import { User } from 'src/user/schema/user.schema';
 import { v4 as uuidv4 } from 'uuid';
 import { TaskPriorityEnum, TaskStatusEnum } from './../task.enum';
 
@@ -27,6 +29,10 @@ export class Task {
 
   @Prop({ type: [{ type: String, maxlength: 50 }] })
   tags?: string[];
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  @Type(() => User)
+  createdBy: User;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
