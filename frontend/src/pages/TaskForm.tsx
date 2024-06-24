@@ -29,12 +29,12 @@ const dropdownPriorityOpts: IDropdownOption[] = [
 ];
 
 export default function TaskForm() {
-  const [title, setTitle] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  const [dueDate, setDueDate] = useState<string>();
-  const [priority, setPriority] = useState<string>();
+  const [title, setTitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [dueDate, setDueDate] = useState<string>('');
+  const [priority, setPriority] = useState<string>('');
   const [status, setStatus] = useState<string>('todo');
-  const [tagList, setTagList] = useState<string>();
+  const [tagList, setTagList] = useState<string>('');
 
   const queryClient = useQueryClient();
 
@@ -50,7 +50,10 @@ export default function TaskForm() {
       setDueDate('');
       setStatus('todo');
       setPriority('');
-      setTagList(undefined);
+      setTagList('');
+    },
+    onError: (err) => {
+      console.error(err);
     },
   });
 
@@ -62,7 +65,7 @@ export default function TaskForm() {
       dueDate: dueDate,
       status: status,
       priority: priority,
-      tags: tagList?.split(' '),
+      tags: tagList?.split(' ').filter((tag) => tag.trim() !== ''), // remove whitespace element
     });
   };
 
@@ -71,6 +74,7 @@ export default function TaskForm() {
       <Stack>
         <TextField
           label="Title"
+          value={title}
           maxLength={100}
           errorMessage={
             title && title.length > 100 ? '100 characters maximal' : undefined
@@ -93,7 +97,7 @@ export default function TaskForm() {
           <DatePicker
             label="Due date"
             placeholder="Select a date"
-            onSelectDate={(date) => setDueDate(date?.toISOString())}
+            onSelectDate={(date) => date && setDueDate(date.toISOString())}
           />
           <Dropdown
             label="Status"
