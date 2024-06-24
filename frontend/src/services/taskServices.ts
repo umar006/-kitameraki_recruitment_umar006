@@ -28,6 +28,11 @@ export const createTask = async (task: AddTask): Promise<Task> => {
     body: JSON.stringify(newTask),
   });
 
+  if (!res.ok) {
+    const error = (await res.json()) as { error: string };
+    throw new Error(error.error);
+  }
+
   const createdTask = await res.json();
 
   return createdTask;
