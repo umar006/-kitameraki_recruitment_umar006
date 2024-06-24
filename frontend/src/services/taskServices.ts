@@ -43,3 +43,7 @@ export const getTaskList = async (): Promise<Task[]> => {
   const taskList = await res.json();
   return taskList;
 };
+
+export const deleteTaskById = async (taskId: string): Promise<void> => {
+  await fetch(`${BASE_URL}/v1/tasks/${taskId}`, { method: 'DELETE' });
+};
