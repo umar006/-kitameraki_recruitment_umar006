@@ -16,3 +16,13 @@ export type AddTask = {
   priority?: string;
   tags?: string[];
 };
+
+export type UpdateTask = {
+  id: string;
+  title?: string;
+  description?: string;
+  dueDate?: string;
+  status?: string;
+  priority?: string;
+  tags?: string[];
+};

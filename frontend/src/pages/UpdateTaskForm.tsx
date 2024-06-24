@@ -8,7 +8,9 @@ import {
 import { IStackTokens, Stack } from '@fluentui/react/lib/Stack';
 import { mergeStyleSets } from '@fluentui/react/lib/Styling';
 import { TextField } from '@fluentui/react/lib/TextField';
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { FormEvent, useState } from 'react';
+import { updateTaskById } from '../services/taskServices';
 import { Task } from '../types/task';
 
 const dropdownStatusOpts: IDropdownOption[] = [
@@ -28,7 +30,6 @@ interface UpdateTaskProps {
 }
 
 export default function UpdateTaskForm({ task, hidePopup }: UpdateTaskProps) {
-  console.log(task);
   const [title, setTitle] = useState<string>(task.title);
   const [description, setDescription] = useState<string>(task.description);
   const [dueDate, setDueDate] = useState<string>(task.dueDate);
@@ -38,10 +39,36 @@ export default function UpdateTaskForm({ task, hidePopup }: UpdateTaskProps) {
     task.tags ? task.tags.join(' ') : '',
   );
 
+  const queryClient = useQueryClient();
+
+  const updateTaskMutation = useMutation({
+    mutationFn: updateTaskById,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      hidePopup();
+    },
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
+  const handleSubmitUpdateTask = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    updateTaskMutation.mutate({
+      id: task.id,
+      title: title,
+      description: description,
+      dueDate: dueDate,
+      status: status,
+      priority: priority,
+      tags: tagList?.split(' ').filter((tag) => tag.trim() !== ''), // remove whitespace element
+    });
+  };
+
   return (
     <div role="document" className={popupStyles.content}>
       <h2>Update Task</h2>
-      <form>
+      <form onSubmit={handleSubmitUpdateTask}>
         <Stack tokens={stackStyles}>
           <TextField
             label="Title"
