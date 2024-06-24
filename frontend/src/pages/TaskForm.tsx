@@ -7,9 +7,10 @@ import {
 } from '@fluentui/react/lib/Dropdown';
 import { IStackTokens, Stack } from '@fluentui/react/lib/Stack';
 import { TextField } from '@fluentui/react/lib/TextField';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FormEvent, useState } from 'react';
 import { createTask } from '../services/taskServices';
+import { Task } from '../types/task';
 
 const stackStyles: IStackTokens = {
   childrenGap: 8,
@@ -35,9 +36,15 @@ export default function TaskForm() {
   const [status, setStatus] = useState<string>('todo');
   const [tagList, setTagList] = useState<string>();
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: createTask,
-    onSuccess: () => {
+    onSuccess: (data: Task) => {
+      queryClient.setQueryData(['tasks'], (oldData: Task[]) => {
+        return [data, ...oldData];
+      });
+
       setTitle('');
       setDescription('');
       setDueDate('');
