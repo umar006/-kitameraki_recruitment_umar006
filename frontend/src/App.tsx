@@ -14,6 +14,8 @@ function App() {
   const [dueDate, setDueDate] = useState<string>();
   const [priority, setPriority] = useState<string>();
   const [status, setStatus] = useState<string>();
+  const [tagList, setTagList] = useState<string>();
+
   const stackStyles: IStackTokens = {
     childrenGap: 8,
   };
@@ -70,6 +72,7 @@ function App() {
       <TextField
         label="Tags"
         description="Separate each tags with whitespace"
+        onChange={(e) => setTagList(e.currentTarget.value)}
       />
     </Stack>
   );
