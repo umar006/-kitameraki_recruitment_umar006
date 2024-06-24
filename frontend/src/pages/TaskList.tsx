@@ -11,42 +11,6 @@ import {
 import { Task } from '../types/task';
 import { deleteTaskById } from '../services/taskServices';
 
-const generateStyles = (theme: ITheme) => {
-  return mergeStyleSets({
-    container: {
-      overflow: 'auto',
-      maxHeight: 512,
-      maxWidth: 512,
-      border: '1px solid ' + theme.palette.neutralLight,
-      marginTop: 24,
-      selectors: {
-        '.ms-List-cell': {
-          height: 52,
-          lineHeight: 52,
-          textOverflow: 'clip',
-          background: theme.palette.neutralLighter,
-          borderBottom: '2px solid white',
-        },
-      },
-    },
-    itemContent: [
-      normalize,
-      {
-        paddingLeft: 16,
-        paddingRight: 16,
-        whiteSpace: 'wrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-      },
-    ],
-  });
-};
-
-const stackStyles: IStackTokens = {
-  childrenGap: 8,
-  padding: 8,
-};
-
 interface TaskListProps {
   queryTasks: UseQueryResult<Task[], Error>;
 }
@@ -95,3 +59,39 @@ export default function TaskList({ queryTasks }: TaskListProps) {
     </div>
   );
 }
+
+const generateStyles = (theme: ITheme) => {
+  return mergeStyleSets({
+    container: {
+      overflow: 'auto',
+      maxHeight: 512,
+      maxWidth: 512,
+      border: '1px solid ' + theme.palette.neutralLight,
+      marginTop: 24,
+      selectors: {
+        '.ms-List-cell': {
+          height: 52,
+          lineHeight: 52,
+          textOverflow: 'clip',
+          background: theme.palette.neutralLighter,
+          borderBottom: '2px solid white',
+        },
+      },
+    },
+    itemContent: [
+      normalize,
+      {
+        paddingLeft: 16,
+        paddingRight: 16,
+        whiteSpace: 'wrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+      },
+    ],
+  });
+};
+
+const stackStyles: IStackTokens = {
+  childrenGap: 8,
+  padding: 8,
+};

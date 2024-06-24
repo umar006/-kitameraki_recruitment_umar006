@@ -12,11 +12,6 @@ import { FormEvent, useState } from 'react';
 import { createTask } from '../services/taskServices';
 import { Task } from '../types/task';
 
-const stackStyles: IStackTokens = {
-  childrenGap: 8,
-};
-const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 150 } };
-
 const dropdownStatusOpts: IDropdownOption[] = [
   { key: 'todo', text: 'TODO' },
   { key: 'in-progress', text: 'IN-PROGRESS' },
@@ -130,3 +125,8 @@ export default function TaskForm() {
     </form>
   );
 }
+
+const stackStyles: IStackTokens = {
+  childrenGap: 8,
+};
+const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 150 } };
