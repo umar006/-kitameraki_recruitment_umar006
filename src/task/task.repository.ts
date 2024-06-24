@@ -18,7 +18,8 @@ export class TaskRepository {
       createdBy: user.id,
     });
     const taskObject = await createdTask.save();
-    return TaskMapper.toDomain(taskObject);
+    const rawTask = await taskObject.populate('createdBy');
+    return TaskMapper.toDomain(rawTask);
   }
 
   async getAllTasks(query: QueryTaskDto, user: User): Promise<Task[]> {
