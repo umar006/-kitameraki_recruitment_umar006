@@ -65,6 +65,7 @@ describe('AuthService', () => {
       };
 
       const user: User = {
+        id: 'testid',
         email: loginDto.email,
         password: 'hashedPassword123',
       };
@@ -84,7 +85,10 @@ describe('AuthService', () => {
         loginDto.password,
         user.password,
       );
-      expect(jwtService.signAsync).toHaveBeenCalledWith({ email: user.email });
+      expect(jwtService.signAsync).toHaveBeenCalledWith({
+        email: user.email,
+        id: user.id,
+      });
       expect(result).toEqual({ token });
     });
 
@@ -95,6 +99,7 @@ describe('AuthService', () => {
       };
 
       const user: User = {
+        id: 'testid',
         email: loginDto.email,
         password: 'hashedPassword123',
       };
