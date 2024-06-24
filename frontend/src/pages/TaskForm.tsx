@@ -82,11 +82,21 @@ export default function TaskForm() {
       <Stack>
         <TextField
           label="Title"
+          maxLength={100}
+          errorMessage={
+            title && title.length > 100 ? '100 characters maximal' : undefined
+          }
           onChange={(e) => setTitle(e.currentTarget.value)}
           required
         />
         <TextField
           label="Description"
+          maxLength={1000}
+          errorMessage={
+            description && description.length > 1000
+              ? '1000 characters maximal'
+              : undefined
+          }
           onChange={(e) => setDescription(e.currentTarget.value)}
           multiline
         />
