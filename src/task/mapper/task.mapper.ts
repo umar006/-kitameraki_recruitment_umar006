@@ -11,6 +11,10 @@ export class TaskMapper {
     task.priority = raw.priority;
     task.dueDate = raw.dueDate;
     task.tags = raw.tags;
+    task.createdBy = {
+      id: raw.createdBy?.id,
+      email: raw.createdBy?.email,
+    };
 
     return task;
   }
