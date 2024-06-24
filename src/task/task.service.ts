@@ -45,8 +45,8 @@ export class TaskService {
     return updatedTask;
   }
 
-  async deleteTaskById(taskId: string): Promise<void> {
-    const deletedTask = await this.taskRepository.deleteTaskById(taskId);
+  async deleteTaskById(taskId: string, user: JwtPayload): Promise<void> {
+    const deletedTask = await this.taskRepository.deleteTaskById(taskId, user);
     if (!deletedTask) {
       throw new TaskNotFoundException();
     }

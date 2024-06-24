@@ -84,7 +84,11 @@ export class TaskController {
   @ApiDeleteTaskByIdResponse()
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteTaskById(@Param('id') id: string): Promise<void> {
-    await this.taskService.deleteTaskById(id);
+  async deleteTaskById(
+    @Param('id') id: string,
+    @Req() request: Request,
+  ): Promise<void> {
+    const user = request['user'] as JwtPayload;
+    await this.taskService.deleteTaskById(id, user);
   }
 }
