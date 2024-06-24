@@ -1,10 +1,6 @@
 import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { DatePicker } from '@fluentui/react/lib/DatePicker';
-import {
-  Dropdown,
-  IDropdownOption,
-  IDropdownStyles,
-} from '@fluentui/react/lib/Dropdown';
+import { Dropdown, IDropdownOption } from '@fluentui/react/lib/Dropdown';
 import { IStackTokens, Stack } from '@fluentui/react/lib/Stack';
 import { TextField } from '@fluentui/react/lib/TextField';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -89,36 +85,38 @@ export default function TaskForm() {
           onChange={(e) => setDescription(e.currentTarget.value)}
           multiline
         />
-        <Stack horizontal tokens={stackStyles}>
-          <DatePicker
-            label="Due date"
-            value={dueDate ? new Date(dueDate) : undefined}
-            placeholder="Select a date"
-            onSelectDate={(date) => date && setDueDate(date.toISOString())}
-          />
-          <Dropdown
-            label="Status"
-            placeholder="Select a status"
-            options={dropdownStatusOpts}
-            styles={dropdownStyles}
-            defaultSelectedKey={status}
-            selectedKey={status}
-            required
-            onChange={(e, opt?: IDropdownOption) => {
-              setStatus(opt?.key as string);
-            }}
-          />
-          <Dropdown
-            label="Priority"
-            placeholder="Select a priority"
-            options={dropdownPriorityOpts}
-            styles={dropdownStyles}
-            selectedKey={priority}
-            onChange={(e, opt?: IDropdownOption) => {
-              setPriority(opt?.key as string);
-            }}
-          />
+        <Stack horizontal tokens={stackStyles} horizontalAlign="space-between">
+          <Stack.Item grow={1}>
+            <Dropdown
+              label="Status"
+              placeholder="Select a status"
+              options={dropdownStatusOpts}
+              defaultSelectedKey={status}
+              selectedKey={status}
+              required
+              onChange={(_, opt?: IDropdownOption) => {
+                setStatus(opt?.key as string);
+              }}
+            />
+          </Stack.Item>
+          <Stack.Item grow={1}>
+            <Dropdown
+              label="Priority"
+              placeholder="Select a priority"
+              options={dropdownPriorityOpts}
+              selectedKey={priority}
+              onChange={(_, opt?: IDropdownOption) => {
+                setPriority(opt?.key as string);
+              }}
+            />
+          </Stack.Item>
         </Stack>
+        <DatePicker
+          label="Due date"
+          value={dueDate ? new Date(dueDate) : undefined}
+          placeholder="Select a date"
+          onSelectDate={(date) => date && setDueDate(date.toISOString())}
+        />
         <TextField
           label="Tags"
           description="Separate each tags with whitespace"
@@ -133,4 +131,3 @@ export default function TaskForm() {
 const stackStyles: IStackTokens = {
   childrenGap: 8,
 };
-const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 150 } };

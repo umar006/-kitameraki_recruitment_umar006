@@ -106,7 +106,7 @@ export default function UpdateTaskForm({ task, hidePopup }: UpdateTaskProps) {
               styles={dropdownStyles}
               selectedKey={status}
               required
-              onChange={(e, opt?: IDropdownOption) => {
+              onChange={(_, opt?: IDropdownOption) => {
                 setStatus(opt?.key as string);
               }}
             />
@@ -116,7 +116,7 @@ export default function UpdateTaskForm({ task, hidePopup }: UpdateTaskProps) {
               options={dropdownPriorityOpts}
               selectedKey={priority}
               styles={dropdownStyles}
-              onChange={(e, opt?: IDropdownOption) => {
+              onChange={(_, opt?: IDropdownOption) => {
                 setPriority(opt?.key as string);
               }}
             />
