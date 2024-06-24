@@ -25,7 +25,8 @@ export class TaskRepository {
     const taskList = await this.taskModel
       .find()
       .skip((query.page - 1) * query.limit)
-      .limit(query.limit);
+      .limit(query.limit)
+      .populate('createdBy');
     return taskList.map((taskRaw) => TaskMapper.toDomain(taskRaw));
   }
 
