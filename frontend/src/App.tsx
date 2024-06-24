@@ -12,6 +12,7 @@ function App() {
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [dueDate, setDueDate] = useState<string>();
+  const [status, setStatus] = useState<string>();
   const stackStyles: IStackTokens = {
     childrenGap: 8,
   };
@@ -51,6 +52,9 @@ function App() {
           placeholder="Select a status"
           options={dropdownStatusOpts}
           styles={dropdownStyles}
+          onChange={(e, opt: IDropdownOption) => {
+            setStatus(opt?.key as string);
+          }}
         />
         <Dropdown
           label="Priority"
