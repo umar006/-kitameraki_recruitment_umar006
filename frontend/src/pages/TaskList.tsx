@@ -3,8 +3,13 @@ import { List } from '@fluentui/react/lib/List';
 import { IStackTokens, Stack } from '@fluentui/react/lib/Stack';
 import { ITheme, mergeStyleSets, normalize } from '@fluentui/react/lib/Styling';
 import { useTheme } from '@fluentui/react/lib/Theme';
-import { UseQueryResult } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  UseQueryResult,
+} from '@tanstack/react-query';
 import { Task } from '../types/task';
+import { deleteTaskById } from '../services/taskServices';
 
 const generateStyles = (theme: ITheme) => {
   return mergeStyleSets({
@@ -50,6 +55,17 @@ export default function TaskList({ queryTasks }: TaskListProps) {
   const theme = useTheme();
   const { data, isLoading } = queryTasks;
 
+  const queryClient = useQueryClient();
+
+  const deleteTaskMutation = useMutation({
+    mutationFn: deleteTaskById,
+    onSuccess: (_: void, deleteTask: string) => {
+      queryClient.setQueryData(['tasks'], (oldData: Task[]) => {
+        return oldData.filter((todo) => todo.id !== deleteTask);
+      });
+    },
+  });
+
   if (isLoading) return 'Loading...';
 
   const onRenderCell = (task?: Task) => {
@@ -62,7 +78,10 @@ export default function TaskList({ queryTasks }: TaskListProps) {
           <Stack.Item align="center">
             <Stack horizontal tokens={stackStyles}>
               <PrimaryButton text="edit" />
-              <PrimaryButton text="delete" />
+              <PrimaryButton
+                text="delete"
+                onClick={() => task && deleteTaskMutation.mutate(task?.id)}
+              />
             </Stack>
           </Stack.Item>
         </Stack>
