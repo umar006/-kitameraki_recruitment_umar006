@@ -31,10 +31,12 @@ export class TaskService {
   async updateTaskById(
     taskId: string,
     updateTaskDto: UpdateTaskDto,
+    user: JwtPayload,
   ): Promise<Task> {
     const updatedTask = await this.taskRepository.updateTaskById(
       taskId,
       updateTaskDto,
+      user,
     );
     if (!updatedTask) {
       throw new TaskNotFoundException();

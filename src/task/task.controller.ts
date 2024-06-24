@@ -74,8 +74,10 @@ export class TaskController {
   async updateTaskById(
     @Param('id') id: string,
     @Body() updateTaskDto: UpdateTaskDto,
+    @Req() request: Request,
   ): Promise<Task> {
-    const resp = await this.taskService.updateTaskById(id, updateTaskDto);
+    const user = request['user'] as JwtPayload;
+    const resp = await this.taskService.updateTaskById(id, updateTaskDto, user);
     return resp;
   }
 

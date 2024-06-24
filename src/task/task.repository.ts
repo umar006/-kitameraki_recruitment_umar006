@@ -44,9 +44,10 @@ export class TaskRepository {
   async updateTaskById(
     taskId: string,
     updateTaskDto: UpdateTaskDto,
+    user: JwtPayload,
   ): Promise<Task | null> {
     const updatedTask = await this.taskModel.findOneAndUpdate(
-      { id: taskId },
+      { id: taskId, createdBy: user.id },
       updateTaskDto,
       { new: true },
     );
