@@ -9,15 +9,23 @@ import { IStackTokens, Stack } from '@fluentui/react/lib/Stack';
 import { TextField } from '@fluentui/react/lib/TextField';
 import { useMutation } from '@tanstack/react-query';
 import { FormEvent, useState } from 'react';
+import { createTask } from '../services/taskServices';
 
-type AddTask = {
-  title?: string;
-  description?: string;
-  dueDate?: string;
-  status?: string;
-  priority?: string;
-  tags?: string[];
+const stackStyles: IStackTokens = {
+  childrenGap: 8,
 };
+const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 150 } };
+
+const dropdownStatusOpts: IDropdownOption[] = [
+  { key: 'todo', text: 'TODO' },
+  { key: 'in-progress', text: 'IN-PROGRESS' },
+  { key: 'completed', text: 'COMPLETED' },
+];
+const dropdownPriorityOpts: IDropdownOption[] = [
+  { key: 'low', text: 'LOW' },
+  { key: 'medium', text: 'MEDIUM' },
+  { key: 'high', text: 'HIGH' },
+];
 
 export default function TaskForm() {
   const [title, setTitle] = useState<string>();
@@ -27,41 +35,8 @@ export default function TaskForm() {
   const [status, setStatus] = useState<string>('todo');
   const [tagList, setTagList] = useState<string>();
 
-  const stackStyles: IStackTokens = {
-    childrenGap: 8,
-  };
-  const dropdownStyles: Partial<IDropdownStyles> = { dropdown: { width: 150 } };
-
-  const dropdownStatusOpts: IDropdownOption[] = [
-    { key: 'todo', text: 'TODO' },
-    { key: 'in-progress', text: 'IN-PROGRESS' },
-    { key: 'completed', text: 'COMPLETED' },
-  ];
-  const dropdownPriorityOpts: IDropdownOption[] = [
-    { key: 'low', text: 'LOW' },
-    { key: 'medium', text: 'MEDIUM' },
-    { key: 'high', text: 'HIGH' },
-  ];
-
   const mutation = useMutation({
-    mutationFn: async () => {
-      const newTask: AddTask = {
-        title: title,
-        description: description,
-        dueDate: dueDate,
-        status: status,
-        priority: priority,
-        tags: tagList?.split(' '),
-      };
-
-      await fetch('http://localhost:3000/v1/tasks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newTask),
-      });
-    },
+    mutationFn: createTask,
     onSuccess: () => {
       setTitle('');
       setDescription('');
@@ -74,7 +49,14 @@ export default function TaskForm() {
 
   const handleSubmitTask = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate();
+    mutation.mutate({
+      title: title,
+      description: description,
+      dueDate: dueDate,
+      status: status,
+      priority: priority,
+      tags: tagList?.split(' '),
+    });
   };
 
   return (
