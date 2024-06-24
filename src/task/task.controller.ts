@@ -9,10 +9,13 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
+import { User } from 'src/user/schema/user.schema';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -35,8 +38,12 @@ export class TaskController {
 
   @ApiCreateTaskResponse()
   @Post()
-  async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    const resp = await this.taskService.createTask(createTaskDto);
+  async createTask(
+    @Body() createTaskDto: CreateTaskDto,
+    @Req() request: Request,
+  ): Promise<Task> {
+    const user = request['user'] as User;
+    const resp = await this.taskService.createTask(createTaskDto, user);
     return resp;
   }
 

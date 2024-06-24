@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { User } from '../user/schema/user.schema';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -10,8 +11,8 @@ import { TaskRepository } from './task.repository';
 export class TaskService {
   constructor(private readonly taskRepository: TaskRepository) {}
 
-  createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.taskRepository.createTask(createTaskDto);
+  createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+    return this.taskRepository.createTask(createTaskDto, user);
   }
 
   getAllTasks(query: QueryTaskDto): Promise<Task[]> {
