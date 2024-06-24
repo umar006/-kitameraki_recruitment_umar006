@@ -1,3 +1,4 @@
+import { Stack } from '@fluentui/react/lib/Stack';
 import { useQuery } from '@tanstack/react-query';
 import TaskForm from './pages/TaskForm';
 import TaskList from './pages/TaskList';
@@ -11,11 +12,14 @@ function App() {
   });
 
   return (
-    <>
-      <TaskForm />
-      <h2>Task List</h2>
-      <TaskList queryTasks={data} />
-    </>
+    <Stack>
+      <Stack.Item align="center">
+        <h1>Task Management</h1>
+        <TaskForm />
+        <h2>Task List</h2>
+        <TaskList queryTasks={data} />
+      </Stack.Item>
+    </Stack>
   );
 }
 
