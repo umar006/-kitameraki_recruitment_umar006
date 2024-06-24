@@ -6,8 +6,10 @@ import {
 } from '@fluentui/react/lib/Dropdown';
 import { IStackTokens, Stack } from '@fluentui/react/lib/Stack';
 import { TextField } from '@fluentui/react/lib/TextField';
+import { useState } from 'react';
 
 function App() {
+  const [title, setTitle] = useState<string>();
   const stackStyles: IStackTokens = {
     childrenGap: 8,
   };
@@ -26,8 +28,12 @@ function App() {
 
   return (
     <Stack>
-      <TextField label="Title" required />
       <TextField label="Description" multiline />
+      <TextField
+        label="Title"
+        onChange={(e) => setTitle(e.currentTarget.value)}
+        required
+      />
       <Stack horizontal tokens={stackStyles}>
         <DatePicker label="Due date" placeholder="Select a date..." />
         <Dropdown
