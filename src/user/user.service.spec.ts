@@ -53,6 +53,7 @@ describe('UserService', () => {
 
       const hashedPwd = 'hashedPassword123';
       const createdUser: User = {
+        id: 'testid',
         ...createUserDto,
         password: hashedPwd,
       };
@@ -102,6 +103,7 @@ describe('UserService', () => {
     it('should return a user if found', async () => {
       const email = 'test@example.com';
       const user: User = {
+        id: 'testid',
         email,
         password: 'hashedPassword123',
       };
