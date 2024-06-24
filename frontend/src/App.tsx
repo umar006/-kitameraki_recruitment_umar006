@@ -10,6 +10,7 @@ import { useState } from 'react';
 
 function App() {
   const [title, setTitle] = useState<string>();
+  const [description, setDescription] = useState<string>();
   const stackStyles: IStackTokens = {
     childrenGap: 8,
   };
@@ -28,11 +29,15 @@ function App() {
 
   return (
     <Stack>
-      <TextField label="Description" multiline />
       <TextField
         label="Title"
         onChange={(e) => setTitle(e.currentTarget.value)}
         required
+      />
+      <TextField
+        label="Description"
+        onChange={(e) => setDescription(e.currentTarget.value)}
+        multiline
       />
       <Stack horizontal tokens={stackStyles}>
         <DatePicker label="Due date" placeholder="Select a date..." />
