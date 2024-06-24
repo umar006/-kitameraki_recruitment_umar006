@@ -1,3 +1,4 @@
+import { Button, PrimaryButton } from '@fluentui/react/lib/Button';
 import { DatePicker } from '@fluentui/react/lib/DatePicker';
 import {
   Dropdown,
@@ -33,48 +34,53 @@ function App() {
   ];
 
   return (
-    <Stack>
-      <TextField
-        label="Title"
-        onChange={(e) => setTitle(e.currentTarget.value)}
-        required
-      />
-      <TextField
-        label="Description"
-        onChange={(e) => setDescription(e.currentTarget.value)}
-        multiline
-      />
-      <Stack horizontal tokens={stackStyles}>
-        <DatePicker
-          label="Due date"
-          placeholder="Select a date..."
-          onSelectDate={(date) => setDueDate(date?.toISOString())}
+    <form>
+      <Stack>
+        <TextField
+          label="Title"
+          onChange={(e) => setTitle(e.currentTarget.value)}
+          required
         />
-        <Dropdown
-          label="Status"
-          placeholder="Select a status"
-          options={dropdownStatusOpts}
-          styles={dropdownStyles}
-          onChange={(e, opt: IDropdownOption) => {
-            setStatus(opt?.key as string);
-          }}
+        <TextField
+          label="Description"
+          onChange={(e) => setDescription(e.currentTarget.value)}
+          multiline
         />
-        <Dropdown
-          label="Priority"
-          placeholder="Select a priority"
-          options={dropdownPriorityOpts}
-          styles={dropdownStyles}
-          onChange={(e, opt: IDropdownOption) => {
-            setPriority(opt?.key as string);
-          }}
+        <Stack horizontal tokens={stackStyles}>
+          <DatePicker
+            label="Due date"
+            placeholder="Select a date"
+            onSelectDate={(date) => setDueDate(date?.toISOString())}
+          />
+          <Dropdown
+            label="Status"
+            placeholder="Select a status"
+            options={dropdownStatusOpts}
+            styles={dropdownStyles}
+            defaultSelectedKey={'todo'}
+            required
+            onChange={(e, opt: IDropdownOption) => {
+              setStatus(opt?.key as string);
+            }}
+          />
+          <Dropdown
+            label="Priority"
+            placeholder="Select a priority"
+            options={dropdownPriorityOpts}
+            styles={dropdownStyles}
+            onChange={(e, opt: IDropdownOption) => {
+              setPriority(opt?.key as string);
+            }}
+          />
+        </Stack>
+        <TextField
+          label="Tags"
+          description="Separate each tags with whitespace"
+          onChange={(e) => setTagList(e.currentTarget.value)}
         />
+        <PrimaryButton type="submit" text="Add a new task" />
       </Stack>
-      <TextField
-        label="Tags"
-        description="Separate each tags with whitespace"
-        onChange={(e) => setTagList(e.currentTarget.value)}
-      />
-    </Stack>
+    </form>
   );
 }
 
