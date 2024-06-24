@@ -1,4 +1,4 @@
-import { Button, PrimaryButton } from '@fluentui/react/lib/Button';
+import { PrimaryButton } from '@fluentui/react/lib/Button';
 import { DatePicker } from '@fluentui/react/lib/DatePicker';
 import {
   Dropdown,
@@ -7,14 +7,24 @@ import {
 } from '@fluentui/react/lib/Dropdown';
 import { IStackTokens, Stack } from '@fluentui/react/lib/Stack';
 import { TextField } from '@fluentui/react/lib/TextField';
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { FormEvent, useState } from 'react';
+
+type AddTask = {
+  title?: string;
+  description?: string;
+  dueDate?: string;
+  status?: string;
+  priority?: string;
+  tags?: string[];
+};
 
 function App() {
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [dueDate, setDueDate] = useState<string>();
   const [priority, setPriority] = useState<string>();
-  const [status, setStatus] = useState<string>();
+  const [status, setStatus] = useState<string>('todo');
   const [tagList, setTagList] = useState<string>();
 
   const stackStyles: IStackTokens = {
@@ -24,7 +34,7 @@ function App() {
 
   const dropdownStatusOpts: IDropdownOption[] = [
     { key: 'todo', text: 'TODO' },
-    { key: 'inprogress', text: 'IN-PROGRESS' },
+    { key: 'in-progress', text: 'IN-PROGRESS' },
     { key: 'completed', text: 'COMPLETED' },
   ];
   const dropdownPriorityOpts: IDropdownOption[] = [
@@ -33,8 +43,44 @@ function App() {
     { key: 'high', text: 'HIGH' },
   ];
 
+  const mutation = useMutation({
+    mutationFn: async () => {
+      const newTask: AddTask = {
+        title: title,
+        description: description,
+        dueDate: dueDate,
+        status: status,
+        priority: priority,
+        tags: tagList?.split(' '),
+      };
+
+      const res = await fetch('http://localhost:3000/v1/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTask),
+      });
+
+      console.log(await res.json());
+    },
+    onSuccess: () => {
+      setTitle('');
+      setDescription('');
+      setDueDate('');
+      setStatus('todo');
+      setPriority('');
+      setTagList(undefined);
+    },
+  });
+
+  const handleSubmitTask = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutation.mutate();
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmitTask}>
       <Stack>
         <TextField
           label="Title"
@@ -59,7 +105,7 @@ function App() {
             styles={dropdownStyles}
             defaultSelectedKey={'todo'}
             required
-            onChange={(e, opt: IDropdownOption) => {
+            onChange={(e, opt?: IDropdownOption) => {
               setStatus(opt?.key as string);
             }}
           />
@@ -68,7 +114,7 @@ function App() {
             placeholder="Select a priority"
             options={dropdownPriorityOpts}
             styles={dropdownStyles}
-            onChange={(e, opt: IDropdownOption) => {
+            onChange={(e, opt?: IDropdownOption) => {
               setPriority(opt?.key as string);
             }}
           />
