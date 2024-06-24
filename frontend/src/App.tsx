@@ -12,6 +12,7 @@ function App() {
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [dueDate, setDueDate] = useState<string>();
+  const [priority, setPriority] = useState<string>();
   const [status, setStatus] = useState<string>();
   const stackStyles: IStackTokens = {
     childrenGap: 8,
@@ -61,6 +62,9 @@ function App() {
           placeholder="Select a priority"
           options={dropdownPriorityOpts}
           styles={dropdownStyles}
+          onChange={(e, opt: IDropdownOption) => {
+            setPriority(opt?.key as string);
+          }}
         />
       </Stack>
       <TextField
