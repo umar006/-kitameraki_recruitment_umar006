@@ -14,8 +14,8 @@ import {
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
+import { JwtPayload } from 'src/auth/dto/jwt-payload.dto';
 import { JwtGuard } from 'src/auth/guard/jwt.guard';
-import { User } from 'src/user/schema/user.schema';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -42,7 +42,7 @@ export class TaskController {
     @Body() createTaskDto: CreateTaskDto,
     @Req() request: Request,
   ): Promise<Task> {
-    const user = request['user'] as User;
+    const user = request['user'] as JwtPayload;
     const resp = await this.taskService.createTask(createTaskDto, user);
     return resp;
   }
@@ -53,7 +53,7 @@ export class TaskController {
     @Query() query: QueryTaskDto,
     @Req() request: Request,
   ): Promise<Task[]> {
-    const user = request['user'] as User;
+    const user = request['user'] as JwtPayload;
     const resp = await this.taskService.getAllTasks(query, user);
     return resp;
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../user/schema/user.schema';
+import { JwtPayload } from 'src/auth/dto/jwt-payload.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -11,11 +11,11 @@ import { TaskRepository } from './task.repository';
 export class TaskService {
   constructor(private readonly taskRepository: TaskRepository) {}
 
-  createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+  createTask(createTaskDto: CreateTaskDto, user: JwtPayload): Promise<Task> {
     return this.taskRepository.createTask(createTaskDto, user);
   }
 
-  getAllTasks(query: QueryTaskDto, user: User): Promise<Task[]> {
+  getAllTasks(query: QueryTaskDto, user: JwtPayload): Promise<Task[]> {
     return this.taskRepository.getAllTasks(query, user);
   }
 

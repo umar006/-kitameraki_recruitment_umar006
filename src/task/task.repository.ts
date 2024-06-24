@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from 'src/user/schema/user.schema';
+import { JwtPayload } from 'src/auth/dto/jwt-payload.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { QueryTaskDto } from './dto/query-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -12,7 +12,10 @@ import { Task } from './schema/task.schema';
 export class TaskRepository {
   constructor(@InjectModel(Task.name) private taskModel: Model<Task>) {}
 
-  async createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+  async createTask(
+    createTaskDto: CreateTaskDto,
+    user: JwtPayload,
+  ): Promise<Task> {
     const createdTask = new this.taskModel({
       ...createTaskDto,
       createdBy: user.id,
@@ -22,7 +25,7 @@ export class TaskRepository {
     return TaskMapper.toDomain(rawTask);
   }
 
-  async getAllTasks(query: QueryTaskDto, user: User): Promise<Task[]> {
+  async getAllTasks(query: QueryTaskDto, user: JwtPayload): Promise<Task[]> {
     const taskList = await this.taskModel
       .find({ createdBy: { _id: user.id } })
       .skip((query.page - 1) * query.limit)
