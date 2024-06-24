@@ -11,6 +11,7 @@ import { useState } from 'react';
 function App() {
   const [title, setTitle] = useState<string>();
   const [description, setDescription] = useState<string>();
+  const [dueDate, setDueDate] = useState<string>();
   const stackStyles: IStackTokens = {
     childrenGap: 8,
   };
@@ -40,7 +41,11 @@ function App() {
         multiline
       />
       <Stack horizontal tokens={stackStyles}>
-        <DatePicker label="Due date" placeholder="Select a date..." />
+        <DatePicker
+          label="Due date"
+          placeholder="Select a date..."
+          onSelectDate={(date) => setDueDate(date?.toISOString())}
+        />
         <Dropdown
           label="Status"
           placeholder="Select a status"
