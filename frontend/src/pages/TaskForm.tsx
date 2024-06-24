@@ -26,7 +26,7 @@ const dropdownPriorityOpts: IDropdownOption[] = [
 export default function TaskForm() {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [dueDate, setDueDate] = useState<string>('');
+  const [dueDate, setDueDate] = useState<string | undefined>('');
   const [priority, setPriority] = useState<string>('');
   const [status, setStatus] = useState<string>('todo');
   const [tagList, setTagList] = useState<string>('');
@@ -42,7 +42,7 @@ export default function TaskForm() {
 
       setTitle('');
       setDescription('');
-      setDueDate('');
+      setDueDate(undefined);
       setStatus('todo');
       setPriority('');
       setTagList('');
@@ -79,6 +79,7 @@ export default function TaskForm() {
         />
         <TextField
           label="Description"
+          value={description}
           maxLength={1000}
           errorMessage={
             description && description.length > 1000
@@ -91,6 +92,7 @@ export default function TaskForm() {
         <Stack horizontal tokens={stackStyles}>
           <DatePicker
             label="Due date"
+            value={dueDate ? new Date(dueDate) : undefined}
             placeholder="Select a date"
             onSelectDate={(date) => date && setDueDate(date.toISOString())}
           />
@@ -99,7 +101,8 @@ export default function TaskForm() {
             placeholder="Select a status"
             options={dropdownStatusOpts}
             styles={dropdownStyles}
-            defaultSelectedKey={'todo'}
+            defaultSelectedKey={status}
+            selectedKey={status}
             required
             onChange={(e, opt?: IDropdownOption) => {
               setStatus(opt?.key as string);
@@ -110,6 +113,7 @@ export default function TaskForm() {
             placeholder="Select a priority"
             options={dropdownPriorityOpts}
             styles={dropdownStyles}
+            selectedKey={priority}
             onChange={(e, opt?: IDropdownOption) => {
               setPriority(opt?.key as string);
             }}
