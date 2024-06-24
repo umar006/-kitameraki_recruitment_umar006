@@ -10,6 +10,7 @@ export class TaskMapper {
     task.description = raw.description;
     task.priority = raw.priority;
     task.dueDate = raw.dueDate;
+    task.tags = raw.tags;
 
     return task;
   }
