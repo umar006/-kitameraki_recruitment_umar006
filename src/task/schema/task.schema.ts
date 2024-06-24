@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Type } from 'class-transformer';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { User } from 'src/user/schema/user.schema';
 import { v4 as uuidv4 } from 'uuid';
+import { User } from '../../user/schema/user.schema';
 import { TaskPriorityEnum, TaskStatusEnum } from './../task.enum';
 
 export type TaskDocument = HydratedDocument<Task>;

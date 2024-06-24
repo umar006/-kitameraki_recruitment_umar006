@@ -1,5 +1,6 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test } from '@nestjs/testing';
+import { JwtPayload } from '../auth/dto/jwt-payload.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskNotFoundException } from './exception/task-not-found.exception';
@@ -49,22 +50,32 @@ describe('TaskService', () => {
         status: TaskStatusEnum.TODO,
       } as CreateTaskDto;
 
+      const user = {
+        id: 'testid',
+        email: 'testemail@test.com',
+      } as JwtPayload;
+
       jest.spyOn(taskRepository, 'createTask').mockResolvedValueOnce(mockTask);
 
-      const createdTask = await taskService.createTask(dto);
+      const createdTask = await taskService.createTask(dto, user);
 
       expect(createdTask).toEqual(mockTask);
-      expect(taskRepository.createTask).toHaveBeenCalledWith(dto);
+      expect(taskRepository.createTask).toHaveBeenCalledWith(dto, user);
     });
   });
 
   describe('getAllTasks', () => {
     it('should return two tasks', async () => {
+      const user = {
+        id: 'testid',
+        email: 'testemail@test.com',
+      } as JwtPayload;
+
       jest
         .spyOn(taskRepository, 'getAllTasks')
         .mockResolvedValueOnce([mockTask, mockTask]);
 
-      const taskList = await taskService.getAllTasks({});
+      const taskList = await taskService.getAllTasks({}, user);
 
       expect(taskList).toEqual([mockTask, mockTask]);
     });
@@ -72,23 +83,36 @@ describe('TaskService', () => {
 
   describe('getTaskById', () => {
     it('should return task with correct id', async () => {
+      const user = {
+        id: 'testid',
+        email: 'testemail@test.com',
+      } as JwtPayload;
+
       jest.spyOn(taskRepository, 'getTaskById').mockResolvedValueOnce(mockTask);
 
-      const task = await taskService.getTaskById(mockTask.id);
+      const task = await taskService.getTaskById(mockTask.id, user);
 
-      expect(taskRepository.getTaskById).toHaveBeenCalledWith(mockTask.id);
+      expect(taskRepository.getTaskById).toHaveBeenCalledWith(
+        mockTask.id,
+        user,
+      );
       expect(task).toEqual(mockTask);
     });
 
     it('should throw NotFoundException if task is not found', async () => {
+      const user = {
+        id: 'testid',
+        email: 'testemail@test.com',
+      } as JwtPayload;
+
       jest.spyOn(taskRepository, 'getTaskById').mockResolvedValueOnce(null);
 
       const taskId = 'notfoundid';
 
-      await expect(taskService.getTaskById(taskId)).rejects.toThrow(
+      await expect(taskService.getTaskById(taskId, user)).rejects.toThrow(
         TaskNotFoundException,
       );
-      expect(taskRepository.getTaskById).toHaveBeenCalledWith(taskId);
+      expect(taskRepository.getTaskById).toHaveBeenCalledWith(taskId, user);
     });
   });
 
@@ -98,16 +122,26 @@ describe('TaskService', () => {
         title: 'updatedtask',
       } as UpdateTaskDto;
 
+      const user = {
+        id: 'testid',
+        email: 'testemail@test.com',
+      } as JwtPayload;
+
       mockTask.title = 'updatedtask';
       jest
         .spyOn(taskRepository, 'updateTaskById')
         .mockResolvedValueOnce(mockTask);
 
-      const task = await taskService.updateTaskById(mockTask.id, updateTask);
+      const task = await taskService.updateTaskById(
+        mockTask.id,
+        updateTask,
+        user,
+      );
 
       expect(taskRepository.updateTaskById).toHaveBeenCalledWith(
         mockTask.id,
         updateTask,
+        user,
       );
       expect(task).toEqual(mockTask);
     });
@@ -118,29 +152,40 @@ describe('TaskService', () => {
       } as UpdateTaskDto;
       const taskId = 'notfoundid';
 
+      const user = {
+        id: 'testid',
+        email: 'testemail@test.com',
+      } as JwtPayload;
+
       jest.spyOn(taskRepository, 'updateTaskById').mockResolvedValueOnce(null);
 
       const taskError = async () =>
-        await taskService.updateTaskById(taskId, updateTask);
+        await taskService.updateTaskById(taskId, updateTask, user);
 
       expect(taskError).rejects.toThrow(TaskNotFoundException);
       expect(taskRepository.updateTaskById).toHaveBeenCalledWith(
         taskId,
         updateTask,
+        user,
       );
     });
   });
 
   describe('deleteTaskById', () => {
     it('should throw NotFoundException if task is not found', async () => {
+      const user = {
+        id: 'testid',
+        email: 'testemail@test.com',
+      } as JwtPayload;
+
       jest.spyOn(taskRepository, 'deleteTaskById').mockResolvedValueOnce(null);
 
       const taskId = 'notfoundid';
 
-      await expect(taskService.deleteTaskById(taskId)).rejects.toThrow(
+      await expect(taskService.deleteTaskById(taskId, user)).rejects.toThrow(
         TaskNotFoundException,
       );
-      expect(taskRepository.deleteTaskById).toHaveBeenCalledWith(taskId);
+      expect(taskRepository.deleteTaskById).toHaveBeenCalledWith(taskId, user);
     });
   });
 });
