@@ -31,7 +31,9 @@ export class TaskRepository {
   }
 
   async getTaskById(taskId: string): Promise<Task | null> {
-    const task = await this.taskModel.findOne({ id: taskId });
+    const task = await this.taskModel
+      .findOne({ id: taskId })
+      .populate('createdBy');
     return task ? TaskMapper.toDomain(task) : null;
   }
 
