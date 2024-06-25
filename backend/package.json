@@ -30,6 +30,7 @@
     "class-validator": "^0.14.1",
     "helmet": "^7.1.0",
     "mongoose": "^8.4.3",
+    "react-intersection-observer": "^9.10.3",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "uuid": "^10.0.0"
