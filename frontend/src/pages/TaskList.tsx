@@ -9,26 +9,39 @@ import { IStackTokens, Stack } from '@fluentui/react/lib/Stack';
 import { ITheme, mergeStyleSets, normalize } from '@fluentui/react/lib/Styling';
 import { useTheme } from '@fluentui/react/lib/Theme';
 import {
+  useInfiniteQuery,
   useMutation,
   useQueryClient,
-  UseQueryResult,
 } from '@tanstack/react-query';
-import { useState } from 'react';
-import { deleteTaskById } from '../services/taskServices';
+import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import {
+  deleteTaskById,
+  getTaskListInfiniteQuery,
+} from '../services/taskServices';
 import { Task } from '../types/task';
 import UpdateTaskForm from './UpdateTaskForm';
 
-interface TaskListProps {
-  queryTasks: UseQueryResult<Task[], Error>;
-}
-
-export default function TaskList({ queryTasks }: TaskListProps) {
+export default function TaskList() {
   const [isPopupVisible, { setTrue: showPopup, setFalse: hidePopup }] =
     useBoolean(false);
   const [selectedTask, setSelectedTask] = useState<Task>({} as Task);
   const theme = useTheme();
 
-  const { data, isLoading } = queryTasks;
+  const { data, isLoading, fetchNextPage } = useInfiniteQuery({
+    queryKey: ['tasks'],
+    queryFn: getTaskListInfiniteQuery,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+  });
+
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, inView]);
 
   const queryClient = useQueryClient();
 
@@ -72,7 +85,15 @@ export default function TaskList({ queryTasks }: TaskListProps) {
 
   return (
     <div className={generateStyles(theme).container}>
-      <List items={data} onRenderCell={onRenderCell} />
+      {data?.pages.map((page) => {
+        return (
+          <List
+            key={page.currPage}
+            items={page.data}
+            onRenderCell={onRenderCell}
+          />
+        );
+      })}
       {isPopupVisible && (
         <Layer>
           <Popup className={popupStyles.root} onDismiss={hidePopup}>
@@ -83,6 +104,7 @@ export default function TaskList({ queryTasks }: TaskListProps) {
           </Popup>
         </Layer>
       )}
+      <div ref={ref}></div>
     </div>
   );
 }
@@ -102,7 +124,6 @@ const generateStyles = (theme: ITheme) => {
   return mergeStyleSets({
     container: {
       overflow: 'auto',
-      maxHeight: 512,
       maxWidth: 512,
       border: '1px solid ' + theme.palette.neutralLight,
       marginTop: 24,

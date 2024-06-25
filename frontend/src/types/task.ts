@@ -26,3 +26,13 @@ export type UpdateTask = {
   priority?: string;
   tags?: string[];
 };
+
+export type TaskListInfiniteQuery = {
+  data: Task[];
+  currPage: number;
+  nextPage: number | null;
+};
+
+export type TaskQueryParam = {
+  pageParam: number;
+};

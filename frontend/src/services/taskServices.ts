@@ -1,4 +1,10 @@
-import { AddTask, Task, UpdateTask } from '../types/task';
+import {
+  AddTask,
+  Task,
+  TaskListInfiniteQuery,
+  TaskQueryParam,
+  UpdateTask,
+} from '../types/task';
 
 const BASE_URL =
   import.meta.env.VITE_BACKEND_URL.trim() || 'http://localhost:3000';
@@ -42,6 +48,21 @@ export const getTaskList = async (): Promise<Task[]> => {
   const res = await fetch(`${BASE_URL}/v1/tasks`);
   const taskList = await res.json();
   return taskList;
+};
+
+const LIMIT = 10;
+
+export const getTaskListInfiniteQuery = async (
+  queryParam: TaskQueryParam,
+): Promise<TaskListInfiniteQuery> => {
+  const res = await fetch(
+    `${BASE_URL}/v1/tasks?page=${queryParam.pageParam}&limit=${LIMIT}`,
+  );
+  const taskList = (await res.json()) as Task[];
+  const currPage = queryParam.pageParam;
+  const nextPage = taskList.length >= LIMIT ? queryParam.pageParam + 1 : null;
+
+  return { data: taskList, currPage, nextPage };
 };
 
 export const deleteTaskById = async (taskId: string): Promise<void> => {
