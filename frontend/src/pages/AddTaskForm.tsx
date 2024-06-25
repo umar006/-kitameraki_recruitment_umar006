@@ -88,7 +88,6 @@ export default function AddTaskForm() {
               label="Status"
               placeholder="Select a status"
               options={dropdownStatusOpts}
-              defaultSelectedKey={status}
               selectedKey={status}
               required
               onChange={(_, opt?: IDropdownOption) => {
