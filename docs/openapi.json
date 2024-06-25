@@ -1,0 +1,391 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/v1/tasks": {
+      "post": {
+        "operationId": "TaskController_createTask",
+        "summary": "Create a new task",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success create a new task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyHttpException"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "tasks"
+        ]
+      },
+      "get": {
+        "operationId": "TaskController_getTaskList",
+        "summary": "Gell all tasks",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get all tasks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Task"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "tasks"
+        ]
+      }
+    },
+    "/v1/tasks/{id}": {
+      "get": {
+        "operationId": "TaskController_getTaskById",
+        "summary": "Get a task by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyHttpException"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "tasks"
+        ]
+      },
+      "patch": {
+        "operationId": "TaskController_updateTaskById",
+        "summary": "Update a task by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTaskDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success update task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyHttpException"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Task Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyHttpException"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "tasks"
+        ]
+      },
+      "delete": {
+        "operationId": "TaskController_deleteTaskById",
+        "summary": "Delete a task by id",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success delete a task"
+          },
+          "404": {
+            "description": "Task Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyHttpException"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "tasks"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Kitameraki Test",
+    "description": "API description",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "CreateTaskDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "todo",
+              "in-progress",
+              "completed"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 50
+            }
+          }
+        },
+        "required": [
+          "title",
+          "status"
+        ]
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "dueDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "priority": {
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "todo",
+              "in-progress",
+              "completed"
+            ],
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "status"
+        ]
+      },
+      "MyHttpException": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number"
+          },
+          "message": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message",
+          "error"
+        ]
+      },
+      "UpdateTaskDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "todo",
+              "in-progress",
+              "completed"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 50
+            }
+          }
+        }
+      }
+    }
+  }
+}
