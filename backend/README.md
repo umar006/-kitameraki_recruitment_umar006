@@ -50,6 +50,18 @@ $ pnpm run start:prod
 $ pnpm run test
 ```
 
+## Environment Variables
+
+Applications might require environment variables to be set. Create a .env file the required variables.
+
+```bash
+MONGODB_URL=
+MONGODB_NAME=
+
+JWT_SECRET=supersecret
+JWT_EXPIRES_IN_HOUR=1
+```
+
 ## API Documentation
 
 You can navigate to `http://localhost:3000/api-doc` to see openapi swagger documentation after you run backend server
