@@ -68,6 +68,15 @@ npm run start:dev
 
 This will start the NestJS development server, typically available at `http://localhost:3000`.
 
+## Test
+
+### Backend only
+
+```bash
+cd backend
+# unit tests
+pnpm run test
+```
 
 ## Environment Variables
 
