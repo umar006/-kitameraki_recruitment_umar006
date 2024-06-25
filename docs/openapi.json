@@ -40,6 +40,11 @@
         },
         "tags": [
           "tasks"
+        ],
+        "security": [
+          {
+            "cookie": []
+          }
         ]
       },
       "get": {
@@ -76,10 +81,18 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "tags": [
           "tasks"
+        ],
+        "security": [
+          {
+            "cookie": []
+          }
         ]
       }
     },
@@ -121,6 +134,11 @@
         },
         "tags": [
           "tasks"
+        ],
+        "security": [
+          {
+            "cookie": []
+          }
         ]
       },
       "patch": {
@@ -180,6 +198,11 @@
         },
         "tags": [
           "tasks"
+        ],
+        "security": [
+          {
+            "cookie": []
+          }
         ]
       },
       "delete": {
@@ -212,6 +235,118 @@
         },
         "tags": [
           "tasks"
+        ],
+        "security": [
+          {
+            "cookie": []
+          }
+        ]
+      }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "summary": "Register a new user",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Success register user"
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyHttpException"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "summary": "Login user",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success login user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyHttpException"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "summary": "Logout user",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Success logout user"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyHttpException"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ],
+        "security": [
+          {
+            "cookie": []
+          }
         ]
       }
     }
@@ -229,6 +364,13 @@
     }
   ],
   "components": {
+    "securitySchemes": {
+      "cookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid"
+      }
+    },
     "schemas": {
       "CreateTaskDto": {
         "type": "object",
@@ -273,6 +415,24 @@
           "status"
         ]
       },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email"
+        ]
+      },
       "Task": {
         "type": "object",
         "properties": {
@@ -310,12 +470,16 @@
             "items": {
               "type": "string"
             }
+          },
+          "createdBy": {
+            "$ref": "#/components/schemas/User"
           }
         },
         "required": [
           "id",
           "title",
-          "status"
+          "status",
+          "createdBy"
         ]
       },
       "MyHttpException": {
@@ -385,6 +549,47 @@
             }
           }
         }
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
       }
     }
   }
