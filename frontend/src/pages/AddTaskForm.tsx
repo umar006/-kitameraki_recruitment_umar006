@@ -6,7 +6,6 @@ import { TextField } from '@fluentui/react/lib/TextField';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { FormEvent, useState } from 'react';
 import { createTask } from '../services/taskServices';
-import { Task } from '../types/task';
 
 const dropdownStatusOpts: IDropdownOption[] = [
   { key: 'todo', text: 'TODO' },
@@ -19,7 +18,7 @@ const dropdownPriorityOpts: IDropdownOption[] = [
   { key: 'high', text: 'HIGH' },
 ];
 
-export default function TaskForm() {
+export default function AddTaskForm() {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [dueDate, setDueDate] = useState<string | undefined>('');
@@ -31,10 +30,8 @@ export default function TaskForm() {
 
   const mutation = useMutation({
     mutationFn: createTask,
-    onSuccess: (data: Task) => {
-      queryClient.setQueryData(['tasks'], (oldData: Task[]) => {
-        return [data, ...oldData];
-      });
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
 
       setTitle('');
       setDescription('');

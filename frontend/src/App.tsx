@@ -1,6 +1,6 @@
 import { Stack } from '@fluentui/react/lib/Stack';
 import { useQuery } from '@tanstack/react-query';
-import TaskForm from './pages/TaskForm';
+import AddTaskForm from './pages/AddTaskForm';
 import TaskList from './pages/TaskList';
 import { getTaskList } from './services/taskServices';
 import { Task } from './types/task';
@@ -15,7 +15,7 @@ function App() {
     <Stack>
       <Stack.Item align="center">
         <h1>Task Management</h1>
-        <TaskForm />
+        <AddTaskForm />
         <h2>Task List</h2>
         <TaskList queryTasks={data} />
       </Stack.Item>
