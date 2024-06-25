@@ -22,9 +22,7 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Kitameraki Task Management App
 
 ## Installation
 
@@ -45,16 +43,20 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
-### API Documentation
-
-Visit `http://localhost:3000/api-doc`
-
 ## Test
 
 ```bash
 # unit tests
 $ pnpm run test
 ```
+
+## API Documentation
+
+You can navigate to `http://localhost:3000/api-doc` to see openapi swagger documentation after you run backend server
+
+or
+
+You can use openapi json file at directory `backend/docs` and import it to swagger hub or tools that can read openapi json file.
 
 ## Support
 
