@@ -60,6 +60,8 @@ MONGODB_NAME=
 
 JWT_SECRET=supersecret
 JWT_EXPIRES_IN_HOUR=1
+
+BCRYPT_SALT=10
 ```
 
 ## API Documentation
